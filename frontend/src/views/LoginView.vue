@@ -1,21 +1,90 @@
 <template>
-    <div class="login">
-      <h1>Login</h1>
+  <div class="login-container">
+    <div class="login-box">
+      <h1>Iniciar Sesión</h1>
       <form @submit.prevent="login">
-        <input v-model="username" placeholder="Usuario" />
-        <input v-model="password" type="password" placeholder="Contraseña" />
-        <button>Entrar</button>
+        <input v-model="username" type="text" placeholder="Usuario" required />
+        <input v-model="password" type="password" placeholder="Contraseña" required />
+        <button type="submit">Entrar</button>
       </form>
     </div>
-  </template>
-  
-  <script setup>
-  import { ref } from 'vue'
-  const username = ref('')
-  const password = ref('')
-  function login() {
-    // Aquí irá la llamada a Flask
-    alert(`Intento de login: ${username.value}`)
+  </div>
+</template>
+
+<script setup>
+import { ref } from 'vue'
+const username = ref('')
+const password = ref('')
+function login() {
+  alert(`Login con ${username.value}`)
+}
+</script>
+
+<style scoped>
+.login-container {
+  width: 100%;
+  min-height: 100vh;
+  padding: 2rem 1rem;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(to right, #e0eafc, #cfdef3);
+  overflow: hidden;
+}
+
+.login-box {
+  background-color: white;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 400px;
+  box-sizing: border-box;
+}
+
+h1 {
+  text-align: center;
+  font-size: 1.8rem;
+  margin-bottom: 1.5rem;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+input {
+  padding: 0.75rem 1rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 1rem;
+}
+
+button {
+  padding: 0.75rem 1rem;
+  background-color: #0077cc;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #005fa3;
+}
+
+/* Asegura buena visualización en pantallas pequeñas */
+@media (max-width: 480px) {
+  .login-box {
+    padding: 1.5rem;
   }
-  </script>
-  
+  h1 {
+    font-size: 1.4rem;
+  }
+  input, button {
+    font-size: 0.95rem;
+  }
+}
+</style>
