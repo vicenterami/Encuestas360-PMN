@@ -1,28 +1,52 @@
 <template>
   <div class="home-container">
     <header>
-      <h1>Encuestas360</h1>
-      <p>Hola, Pepe Pepito</p>
+      <h1>Panel de Administración - Encuestas360</h1>
+      <p>Bienvenido, Administrador</p>
     </header>
 
     <main>
       <section>
-        <h2>Nueva Encuesta</h2>
-        <button>Comenzar Encuesta</button>
+        <h2>Crear Nueva Encuesta</h2>
+        <button @click="goTo('/create-survey')">Comenzar Encuesta</button>
       </section>
 
       <section>
-        <h2>Historial</h2>
-        <button>Ver Historial</button>
+        <h2>Resultados de Encuestas</h2>
+        <button @click="goTo('/results')">Ver Resultados</button>
       </section>
 
       <section>
-        <h2>Soporte</h2>
-        <button>Reportar Problema</button>
+        <h2>Buscar Clientes</h2>
+        <button @click="goTo('/search-clients')">Buscar Clientes</button>
+      </section>
+
+      <section>
+        <h2>Administrar Clientes</h2>
+        <button @click="goTo('/clients')">Administrar</button>
+      </section>
+
+      <section>
+        <h2>Historial de Encuestas</h2>
+        <button @click="goTo('/history')">Ver Historial</button>
+      </section>
+
+      <section>
+        <h2>Soporte Técnico</h2>
+        <button @click="goTo('/support')">Soporte</button>
       </section>
     </main>
   </div>
 </template>
+
+<script setup>
+import { useRouter } from 'vue-router'
+const router = useRouter()
+
+function goTo(route) {
+  router.push(route)
+}
+</script>
 
 <style scoped>
 .home-container {
