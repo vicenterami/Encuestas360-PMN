@@ -8,19 +8,39 @@
           <input v-model="password" type="password" placeholder="Contraseña" required />
           <button type="submit">Registrarse</button>
         </form>
+        <p v-if="errorMessage" style="color:red;">{{ errorMessage }}</p>
       </div>
     </div>
   </template>
   
   <script setup>
   import { ref } from 'vue'
+  import API from '../api.js'
+  import { useRouter } from 'vue-router'
   
   const name = ref('')
   const email = ref('')
   const password = ref('')
+  const errorMessage = ref('')
+  const router = useRouter()
   
-  function register() {
-    alert(`Usuario registrado: ${name.value} (${email.value}) (simulado)`)
+  async function register() {
+    try {
+      const res = await API.post('/register', {
+        name: name.value,
+        email: email.value,
+        password: password.value
+      })
+
+      if (res.data.success) {
+        alert('Registro exitoso. Ahora puedes iniciar sesión.')
+        router.push('/')
+      } else {
+        errorMessage.value = res.data.message || 'Error desconocido.'
+      }
+      } catch (err) {
+      errorMessage.value = err.response?.data?.message || 'Error al registrar.'
+    }
   }
   </script>
   

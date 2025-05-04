@@ -1,6 +1,6 @@
-# Encuestas360-PMN
+# Encuestas360-PMV
 
-Proyecto PMN individual para el sistema de encuestas.
+Proyecto PMV individual para el sistema de encuestas.
 
 ## Tecnologías
 - Frontend: Vue.js + Vue Router

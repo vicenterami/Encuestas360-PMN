@@ -3,7 +3,7 @@
     <div class="login-box">
       <h1>Iniciar Sesión</h1>
       <form @submit.prevent="login">
-        <input v-model="username" type="text" placeholder="Usuario" required />
+        <input v-model="email" type="text" placeholder="Email" required />
         <input v-model="password" type="password" placeholder="Contraseña" required />
         <button type="submit">Entrar</button>
       </form>
@@ -13,12 +13,42 @@
 
 <script setup>
 import { ref } from 'vue'
-const username = ref('')
+import { useRouter } from 'vue-router'
+import axios from 'axios'
+
+const email = ref('')
 const password = ref('')
-function login() {
-  alert(`Login con ${username.value}`)
+const router = useRouter()
+
+axios.get('http://localhost:5000/api/usuarios')
+  .then(response => {
+    console.log(response.data);
+  })
+  .catch(error => {
+    console.error('Error al obtener usuarios:', error);
+  });
+
+
+const login = async () => {
+  try {
+    const res = await axios.post('http://localhost:5000/api/login', {
+      email: email.value,
+      password: password.value
+    })
+
+    if (res.data.success) {
+      // Aquí puedes guardar token o datos del usuario si decides usar auth real
+      alert('Inicio de sesión exitoso')
+      router.push('/home')  // Redirección automática
+    } else {
+      alert(res.data.message)
+    }
+  } catch (error) {
+    alert('Error al iniciar sesión')
+  }
 }
 </script>
+
 
 <style scoped>
 .login-container {
