@@ -5,6 +5,7 @@
       <form @submit.prevent="login">
         <input v-model="email" type="text" placeholder="Email" required />
         <input v-model="password" type="password" placeholder="Contraseña" required />
+        <div v-if="errorMessage" class="error-message">{{ errorMessage }}</div>
         <button type="submit">Entrar</button>
       </form>
     </div>
@@ -13,42 +14,50 @@
 
 <script setup>
 import { ref } from 'vue'
+import API from '../api.js'
 import { useRouter } from 'vue-router'
-import axios from 'axios'
 
 const email = ref('')
 const password = ref('')
+const errorMessage = ref('')
 const router = useRouter()
 
-axios.get('http://localhost:5000/api/usuarios')
-  .then(response => {
-    console.log(response.data);
-  })
-  .catch(error => {
-    console.error('Error al obtener usuarios:', error);
-  });
-
-
-const login = async () => {
+async function login() {
   try {
-    const res = await axios.post('http://localhost:5000/api/login', {
+    const res = await API.post('/login', {
       email: email.value,
       password: password.value
-    })
+    });
 
     if (res.data.success) {
-      // Aquí puedes guardar token o datos del usuario si decides usar auth real
-      alert('Inicio de sesión exitoso')
-      router.push('/home')  // Redirección automática
-    } else {
-      alert(res.data.message)
+      localStorage.setItem('access_token', res.data.access_token);
+      // Usar directamente res.data.is_admin
+      router.push(res.data.is_admin ? '/home' : '/survey'); 
+      alert('Inicio de sesión exitoso');
     }
-  } catch (error) {
-    alert('Error al iniciar sesión')
+  } catch (err) {
+    // Mostrar mensaje de error en la interfaz
+    errorMessage.value = err.response?.data?.message || 'Error al iniciar sesión.';
   }
 }
+
+// Obtener usuarios al cargar
+API.get('/usuarios')
+  .then(response => {
+    console.log(response.data)
+  })
+  .catch(error => {
+    console.error('Error al obtener usuarios:', error)
+  })
 </script>
 
+
+<style scoped>
+.error-message {
+  color: red;
+  margin-top: 1rem;
+}
+</style>
 
 <style scoped>
 .login-container {
