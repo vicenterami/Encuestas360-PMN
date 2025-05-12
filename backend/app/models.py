@@ -69,6 +69,9 @@ class Survey(db.Model):
     creator = db.relationship('User')
     survey_type = db.relationship('SurveyType')
 
+    questions = db.relationship('Question', back_populates='survey', cascade='all, delete-orphan')
+
+
     def to_dict(self):
         return {
             'id': self.id,
@@ -94,7 +97,8 @@ class Question(db.Model):
     survey_id = db.Column(db.Integer, db.ForeignKey('surveys.id'))
     question_type_id = db.Column(db.Integer, db.ForeignKey('question_types.id'))
 
-    survey = db.relationship('Survey')
+    survey = db.relationship('Survey', back_populates='questions')
+    responses = db.relationship('Response', back_populates='question', cascade='all, delete-orphan')
     question_type = db.relationship('QuestionType')
 
 class Response(db.Model):
@@ -107,5 +111,5 @@ class Response(db.Model):
     question_id = db.Column(db.Integer, db.ForeignKey('questions.id'))
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
-    question = db.relationship('Question')
+    question = db.relationship('Question', back_populates='responses')
     user = db.relationship('User')

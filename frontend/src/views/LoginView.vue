@@ -33,7 +33,6 @@ async function login() {
       localStorage.setItem('access_token', res.data.access_token);
       // Usar directamente res.data.is_admin
       router.push(res.data.is_admin ? '/home' : '/survey'); 
-      alert('Inicio de sesión exitoso');
     }
   } catch (err) {
     // Mostrar mensaje de error en la interfaz
